@@ -20,7 +20,7 @@ object Utils {
         return firstName to lastName
     }
 
-    fun toInitial(firstName: String?, lastName: String?): String? {
+    fun toInitials(firstName: String?, lastName: String?): String? {
         var initials: String? = ""
         if (firstName !== null) {
             if (!firstName.isBlank()) {
