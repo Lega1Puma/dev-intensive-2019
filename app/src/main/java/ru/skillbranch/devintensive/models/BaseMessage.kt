@@ -15,13 +15,13 @@ abstract class BaseMessage (
 
         private var lastId: Int = -1
 
-        fun makeMessage(from: User?, chat: Chat, date: Date = Date(), payload: String, type: String = "text", isIncoming: Boolean = false): BaseMessage {
+        fun makeMessage(from: User?, chat: Chat, date: Date = Date(), payload: Any?, type: String = "text", isIncoming: Boolean = false): BaseMessage {
 
             lastId++
 
             return when(type) {
-                "image" -> ImageMessage(id = "$lastId", from = from, chat = chat, date = date, image = payload, isIncoming = isIncoming)
-                else -> TextMessage(id = "$lastId", from = from, chat = chat, date = date, text = payload, isIncoming = isIncoming)
+                "image" -> ImageMessage(id = "$lastId", from = from, chat = chat, date = date, image = payload as String, isIncoming = isIncoming)
+                else -> TextMessage(id = "$lastId", from = from, chat = chat, date = date, text = payload as String, isIncoming = isIncoming)
             }
 
         }
