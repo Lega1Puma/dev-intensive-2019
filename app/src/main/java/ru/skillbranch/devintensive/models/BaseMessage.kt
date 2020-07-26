@@ -20,8 +20,8 @@ abstract class BaseMessage (
             lastId++
 
             return when(type) {
-                "image" -> ImageMessage(id = "$lastId", from = from, chat = chat, date = date, image = payload as String, isIncoming = isIncoming)
-                else -> TextMessage(id = "$lastId", from = from, chat = chat, date = date, text = payload as String, isIncoming = isIncoming)
+                "image" -> ImageMessage(id = "$lastId", from = from, chat = chat, date = date, image = payload.toString(), isIncoming = isIncoming)
+                else -> TextMessage(id = "$lastId", from = from, chat = chat, date = date, text = payload.toString(), isIncoming = isIncoming)
             }
 
         }
