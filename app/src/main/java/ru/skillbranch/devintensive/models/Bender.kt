@@ -53,20 +53,12 @@ class Bender(
     }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-//        return if (question.answers.contains(answer)) {
-//            question = question.nextQuestion()
-//            "Отлично - ты справился\n${question.question}" to status.color
-//        } else {
-//            status = status.nextStatus()
-//            "Это неправильный ответ\n${question.question}" to status.color
-//        }
-
         val reg: Regex?
         var des: String
 
         when (question) {
             Question.NAME -> {
-                reg = Regex("^([A-ZА-Я])[a-zа-я]+$")
+                reg = Regex("^([A-ZА-Я])[ a-zа-я]+$")
                 des = "Имя должно начинаться с заглавной буквы"
             }
             Question.PROFESSION -> {
