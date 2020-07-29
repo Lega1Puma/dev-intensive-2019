@@ -17,10 +17,11 @@ interface Plural {
 enum class TimeUnits: Plural {
     SECOND {
         override fun plural(value: Int): String {
-            return "$value " + when (value % 100) {
+            val absoluteValue = value.absoluteValue
+            return "$value " + when (absoluteValue % 100) {
                 in 5..20 -> "секунд"
-                else -> when (value % 10) {
-                    1 -> "сикунду"
+                else -> when (absoluteValue % 10) {
+                    1 -> "секунду"
                     in 2..4 -> "секунды"
                     in 5..9 -> "секунд"
                     else -> "секунд"
@@ -30,9 +31,10 @@ enum class TimeUnits: Plural {
     },
     MINUTE {
         override fun plural(value: Int): String {
-            return "$value " + when (value % 100) {
+            val absoluteValue = value.absoluteValue
+            return "$value " + when (absoluteValue % 100) {
                 in 5..20 -> "минут"
-                else -> when (value % 10) {
+                else -> when (absoluteValue % 10) {
                     1 -> "минуту"
                     in 2..4 -> "минуты"
                     in 5..9 -> "минут"
@@ -43,9 +45,10 @@ enum class TimeUnits: Plural {
     },
     HOUR {
         override fun plural(value: Int): String {
-            return "$value " + when (value % 100) {
+            val absoluteValue = value.absoluteValue
+            return "$value " + when (absoluteValue % 100) {
                 in 5..20 -> "часов"
-                else -> when (value % 10) {
+                else -> when (absoluteValue % 10) {
                     1 -> "час"
                     in 2..4 -> "часа"
                     in 5..9 -> "часов"
@@ -56,9 +59,10 @@ enum class TimeUnits: Plural {
     },
     DAY {
         override fun plural(value: Int): String {
-            return "$value " + when (value % 100) {
+            val absoluteValue = value.absoluteValue
+            return "$value " + when (absoluteValue % 100) {
                 in 5..20 -> "день"
-                else -> when (value % 10) {
+                else -> when (absoluteValue % 10) {
                     1 -> "день"
                     in 2..4 -> "дня"
                     in 5..9 -> "дней"
