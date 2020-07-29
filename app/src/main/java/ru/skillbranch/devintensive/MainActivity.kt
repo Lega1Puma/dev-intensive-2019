@@ -70,8 +70,9 @@ class MainActivity: AppCompatActivity(), View.OnClickListener, TextView.OnEditor
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
             sendMessage()
+            return true
         }
-        return true
+        return false
     }
 
 }
