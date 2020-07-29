@@ -65,14 +65,13 @@ class MainActivity: AppCompatActivity(), View.OnClickListener, TextView.OnEditor
 
     override fun onClick(v: View?) {
         if (v?.id == R.id.iv_send) {
-            //sendMessage()
-            textTxt.text = "open: " + isKeyboardOpen().toString() + "\nclose " + isKeyboardClosed()
+            sendMessage()
         }
     }
 
     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
         if (actionId == EditorInfo.IME_ACTION_DONE) {
-            //sendMessage()
+            sendMessage()
         }
         return true
     }
