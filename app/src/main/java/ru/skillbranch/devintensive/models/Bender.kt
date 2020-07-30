@@ -6,7 +6,6 @@ class Bender(
     var status: Status = Status.NORMAL,
     var question: Question = Question.NAME
     ) {
-
     enum class Status(val color: Triple<Int, Int, Int>) {
         NORMAL(Triple(255, 255, 255)),
         WARNING(Triple(255, 120, 0)),
@@ -41,7 +40,7 @@ class Bender(
         IDLE("На этом все, вопросов больше нет", listOf()) {
             override fun nextQuestion(): Question = IDLE
         };
-        abstract fun nextQuestion():Question
+        abstract fun nextQuestion(): Question
     }
 
     fun askQuestion(): String = when(question) {
@@ -84,7 +83,6 @@ class Bender(
                 des = "На этом все, вопросов больше нет"
             }
         }
-
         if (reg == null) {
             return des to status.color
         } else {
