@@ -16,12 +16,12 @@ import ru.skillbranch.devintensive.models.Bender
 
 class MainActivity: AppCompatActivity(), View.OnClickListener, TextView.OnEditorActionListener {
 
-    lateinit var benderImage: ImageView
-    lateinit var textTxt: TextView
-    lateinit var messageEt: EditText
-    lateinit var sendBtn:ImageView
+    private lateinit var benderImage: ImageView
+    private lateinit var textTxt: TextView
+    private lateinit var messageEt: EditText
+    private lateinit var sendBtn:ImageView
 
-    lateinit var benderObj: Bender
+    private lateinit var benderObj: Bender
 
     private fun sendMessage() {
         hideKeyboard()
@@ -40,6 +40,7 @@ class MainActivity: AppCompatActivity(), View.OnClickListener, TextView.OnEditor
         textTxt = tv_text
         messageEt = et_message
         messageEt.setOnEditorActionListener(this)
+        messageEt.setText("")
         sendBtn = iv_send
         sendBtn.setOnClickListener(this)
 

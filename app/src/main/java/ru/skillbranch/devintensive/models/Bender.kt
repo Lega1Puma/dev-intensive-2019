@@ -1,5 +1,7 @@
 package ru.skillbranch.devintensive.models
 
+import java.util.*
+
 class Bender(
     var status: Status = Status.NORMAL,
     var question: Question = Question.NAME
@@ -58,15 +60,15 @@ class Bender(
 
         when (question) {
             Question.NAME -> {
-                reg = Regex("^([A-ZА-Я])[ a-zа-я]+$")
+                reg = Regex("^([A-ZА-Я])[ a-zа-я0-9]+$")
                 des = "Имя должно начинаться с заглавной буквы"
             }
             Question.PROFESSION -> {
-                reg = Regex("^[ a-zа-я]+$")
+                reg = Regex("^([a-zа-я])[ a-zа-я0-9]+$")
                 des = "Профессия должна начинаться со строчной буквы"
             }
             Question.MATERIAL -> {
-                reg = Regex("^[a-zа-я]+$")
+                reg = Regex("^[a-zA-Zа-яА-Я ]+$")
                 des = "Материал не должен содержать цифр"
             }
             Question.BDAY -> {
@@ -87,7 +89,7 @@ class Bender(
             return des to status.color
         } else {
             if (reg.matches(answer)) {
-                if (question.answers.contains(answer.toLowerCase())) {
+                if (question.answers.contains(answer.toLowerCase(Locale.getDefault()))) {
                     question = question.nextQuestion()
                     des = "Отлично - ты справился"
                 } else {
