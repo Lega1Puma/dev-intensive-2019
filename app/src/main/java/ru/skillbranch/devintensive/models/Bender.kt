@@ -39,7 +39,6 @@ class Bender(
         IDLE("На этом все, вопросов больше нет", listOf()) {
             override fun nextQuestion(): Question = IDLE
         };
-
         abstract fun nextQuestion():Question
     }
 
@@ -53,6 +52,7 @@ class Bender(
     }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
+
         val reg: Regex?
         var des: String
 
@@ -92,16 +92,15 @@ class Bender(
                     des = "Отлично - ты справился"
                 } else {
                     if (status == Status.CRITICAL) {
-                        status = Status.NORMAL
                         question = Question.NAME
                         des = "Это неправильный ответ. Давай все по новой"
                     } else {
-                        status = status.nextStatus()
                         des = "Это неправильный ответ"
                     }
+                    status = status.nextStatus()
                 }
             }
+            return "$des\n${question.question}" to status.color
         }
-        return "$des\n${question.question}" to status.color
     }
 }
