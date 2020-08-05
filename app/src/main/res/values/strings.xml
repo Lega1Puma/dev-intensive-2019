@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Chat Dev-Intensive 2019</string>
-    <string name="text_bender">bender</string>
-    <string name="text_entire">Введите текст</string>
-    <string name="text_send">Отправить</string>
+    <string name="profile_hint_repository">Репозиторий</string>
+    <string name="profile_hint_about">О себе</string>
+    <string name="profile_hint_last_name">Фамилия</string>
+    <string name="profile_hint_first_name">Имя</string>
+    <string name="profile_label_rating">Рейтинг</string>
+    <string name="profile_label_respect">Уважение</string>
+    <string name="profile_validate_error">Невалидный адрес репозитория</string>
 </resources>
