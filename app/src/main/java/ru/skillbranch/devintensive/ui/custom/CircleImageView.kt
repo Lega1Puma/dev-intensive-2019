@@ -70,6 +70,7 @@ class CircleImageView @JvmOverloads constructor(
 
     private fun prepareShader(w: Int, h: Int) {
         if (w == 0 || drawable == null) return
+
         val srcBitmap = drawable.toBitmap(w, h, Bitmap.Config.ARGB_8888)
         avatarPaint.shader = BitmapShader(srcBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP)
     }
@@ -84,36 +85,44 @@ class CircleImageView @JvmOverloads constructor(
             right = w
             bottom = h
         }
+
         borderRect.set(viewRect)
+
         val half = (borderWidth / 2).toInt()
         borderRect.inset(half, half)
+
         prepareShader(w, h)
     }
 
     override fun setImageBitmap(bm: Bitmap?) {
         super.setImageBitmap(bm)
+
         isInitialSet = false
         prepareShader(width, height)
     }
 
     override fun setImageDrawable(drawable: Drawable?) {
         super.setImageDrawable(drawable)
+
         isInitialSet = false
         prepareShader(width, height)
     }
 
     override fun setImageResource(resId: Int) {
         super.setImageResource(resId)
+
         isInitialSet = false
         prepareShader(width, height)
     }
 
     override fun onDraw(canvas: Canvas) {
+
         if (!isInitialSet && drawable != null) {
             drawAvatar(canvas)
         } else {
             drawInitials(canvas)
         }
+
         canvas.drawOval(borderRect.toRectF(), borderPaint)
     }
 
@@ -125,6 +134,7 @@ class CircleImageView @JvmOverloads constructor(
             textAlign = Paint.Align.CENTER
             textSize = height * 0.5F
         }
+
         val offsetY = (initialsPaint.descent() + initialsPaint.ascent() * 0.6F)
         canvas.drawText(initials, viewRect.exactCenterX(), viewRect.exactCenterY() - offsetY, initialsPaint)
     }

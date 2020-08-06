@@ -92,6 +92,19 @@ class ProfileActivity: AppCompatActivity() {
         }
     }
 
+    private fun saveProfileInfo() {
+        setupInitials()
+        if (!isValidUri) et_repository.setText("")
+        Profile (
+            firstName = et_first_name.text.toString(),
+            lastName = et_last_name.text.toString(),
+            about = et_about.text.toString(),
+            repository = et_repository.text.toString()
+        ).apply {
+            viewModel.saveProfileData(this)
+        }
+    }
+
     private fun showCurrentMode(isEdit: Boolean) {
         val info = viewFields.filter {
             setOf(
@@ -129,6 +142,11 @@ class ProfileActivity: AppCompatActivity() {
         }
     }
 
+    private fun validateRepositoryUri(repo: String): Boolean {
+        val reg = Regex("^((https?://)?(www.)?(github.com/)((?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join).)([a-zA-Z_-]+))?$")
+        return reg.matches(repo)
+    }
+
     private fun initViewModel() {
         viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer {
@@ -139,10 +157,6 @@ class ProfileActivity: AppCompatActivity() {
         })
     }
 
-    private fun updateTheme(mode: Int) {
-        delegate.localNightMode = mode
-    }
-
     private fun updateUI(profile: Profile) {
         profile.toMap().also {
             for ((k, v) in viewFields) {
@@ -151,21 +165,7 @@ class ProfileActivity: AppCompatActivity() {
         }
     }
 
-    private fun saveProfileInfo() {
-        setupInitials()
-        if (!isValidUri) et_repository.setText("")
-        Profile (
-            firstName = et_first_name.text.toString(),
-            lastName = et_last_name.text.toString(),
-            about = et_about.text.toString(),
-            repository = et_repository.text.toString()
-        ).apply {
-            viewModel.saveProfileData(this)
-        }
-    }
-
-    private fun validateRepositoryUri(repo: String): Boolean {
-        val reg = Regex("^((https?://)?(www.)?(github.com/)((?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join).)([a-zA-Z_-]+))?$")
-        return reg.matches(repo)
+    private fun updateTheme(mode: Int) {
+        delegate.localNightMode = mode
     }
 }
