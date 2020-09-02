@@ -143,4 +143,20 @@ class CircleImageView @JvmOverloads constructor(
         canvas.drawOval(viewRect.toRectF(), avatarPaint)
     }
 
+    fun getBorderWidth(): Float {
+        return borderWidth
+    }
+
+    fun setBorderWidth(width: Float) {
+        borderWidth = width
+    }
+
+    fun getBorderColor(): Int {
+        return borderColor
+    }
+
+    fun setBorderColor(color: Int) {
+        borderColor = color
+    }
+    
 }
