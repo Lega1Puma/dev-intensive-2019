@@ -3,8 +3,8 @@ package ru.skillbranch.devintensive.ui.profile
 import android.graphics.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-//import android.text.Editable
-//import android.text.TextWatcher
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
 //import androidx.core.widget.doOnTextChanged
@@ -37,7 +37,7 @@ class ProfileActivity: AppCompatActivity() {
 
         initViews(savedInstanceState)
         initViewModel()
-        
+
         isValidUri = true
     }
 
@@ -95,23 +95,23 @@ class ProfileActivity: AppCompatActivity() {
 //            }
 //        }
 
-//        et_repository.addTextChangedListener(object : TextWatcher{
-//            override fun afterTextChanged(s: Editable?) {
-//            }
-//
-//            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-//            }
-//
-//            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-//                isValidUri = validateRepositoryUri(s.toString())
-//                if (!isValidUri) {
-//                    wr_repository.error = getString(R.string.profile_validate_error)
-//                } else {
-//                    wr_repository.error = ""
-//                }
-//            }
-//
-//        })
+        et_repository.addTextChangedListener(object : TextWatcher{
+            override fun afterTextChanged(s: Editable?) {
+            }
+
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                isValidUri = validateRepositoryUri(s.toString())
+                if (!isValidUri) {
+                    wr_repository.error = getString(R.string.profile_validate_error)
+                } else {
+                    wr_repository.error = ""
+                }
+            }
+
+        })
     }
 
     private fun saveProfileInfo() {
