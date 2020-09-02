@@ -1,5 +1,6 @@
 package ru.skillbranch.devintensive.ui.profile
 
+import android.annotation.SuppressLint
 import android.graphics.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -7,9 +8,11 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatDelegate
 //import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
+//import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import com.google.android.material.textfield.TextInputEditText
 import kotlinx.android.synthetic.main.activity_profile.*
 import ru.skillbranch.devintensive.R
@@ -127,6 +130,7 @@ class ProfileActivity: AppCompatActivity() {
         }
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private fun showCurrentMode(isEdit: Boolean) {
         val info = viewFields.filter {
             setOf(
@@ -165,12 +169,12 @@ class ProfileActivity: AppCompatActivity() {
     }
 
     private fun validateRepositoryUri(repo: String): Boolean {
-        val reg = Regex("^((https?://)?(www.)?(github.com/)((?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join).)([a-zA-Z_-]+))?$")
+        val reg = Regex("^((https?://)?(www.)?(github.com/)((?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join).)([0-9a-zA-Z_-]+))?$")
         return reg.matches(repo)
     }
 
     private fun initViewModel() {
-        viewModel = ViewModelProvider(this).get(ProfileViewModel::class.java)
+        viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer {
             updateUI(it)
         })
@@ -188,6 +192,6 @@ class ProfileActivity: AppCompatActivity() {
     }
 
     private fun updateTheme(mode: Int) {
-        delegate.localNightMode = mode
+        AppCompatDelegate.setDefaultNightMode(mode)
     }
 }
