@@ -10,11 +10,5 @@
         <item name="colorAccentedSurface">@color/color_primary_light</item>
         <item name="colorIcon">@color/color_gray</item>
         <item name="colorDivider">@color/color_divider_dark</item>
-
     </style>
-
-    <style name="SplahTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:windowBackground">@drawable/splash</item>
-    </style>
-
 </resources>

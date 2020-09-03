@@ -8,7 +8,6 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatDelegate
 //import androidx.core.widget.doOnTextChanged
 import androidx.lifecycle.Observer
 //import androidx.lifecycle.ViewModelProvider
@@ -190,7 +189,6 @@ class ProfileActivity: AppCompatActivity() {
     }
 
     private fun updateTheme(mode: Int) {
-        AppCompatDelegate.setDefaultNightMode(mode)
         delegate.setLocalNightMode(mode)
     }
 }
