@@ -40,8 +40,6 @@ class ProfileActivity: AppCompatActivity() {
 
         initViews(savedInstanceState)
         initViewModel()
-
-        isValidUri = true
     }
 
     override fun onResume() {
@@ -193,5 +191,6 @@ class ProfileActivity: AppCompatActivity() {
 
     private fun updateTheme(mode: Int) {
         AppCompatDelegate.setDefaultNightMode(mode)
+        delegate.setLocalNightMode(mode)
     }
 }
