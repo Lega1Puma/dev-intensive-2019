@@ -167,7 +167,7 @@ class ProfileActivity: AppCompatActivity() {
     }
 
     private fun validateRepositoryUri(repo: String): Boolean {
-        val reg = Regex("^((https?://)?(www.)?(github.com/)((?!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join).)([0-9a-zA-Z_-]+))?$")
+        val reg = Regex("^((https://)?(www.)?(github.com/)([0-9a-zA-Z_-]+)(?<!enterprise|features|topics|collections|trending|events|marketplace|pricing|nonprofit|customer-stories|security|login|join))?\$", RegexOption.IGNORE_CASE)
         return reg.matches(repo)
     }
 

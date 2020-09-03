@@ -4,8 +4,8 @@ import android.content.Context
 import android.graphics.*
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.widget.ImageView
 import androidx.annotation.ColorInt
-import androidx.annotation.Px
 import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.toRectF
 import ru.skillbranch.devintensive.R
@@ -14,7 +14,7 @@ class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-): androidx.appcompat.widget.AppCompatImageView(context, attrs, defStyleAttr) {
+): ImageView(context, attrs, defStyleAttr) {
 
     companion object {
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
@@ -22,7 +22,6 @@ class CircleImageView @JvmOverloads constructor(
         private val SCALE_TYPE = ScaleType.CENTER_CROP
     }
 
-    @Px
     private var borderWidth: Float = DEFAULT_BORDER_WIDTH * context.resources.displayMetrics.density
     @ColorInt
     private var borderColor: Int = DEFAULT_BORDER_COLOR
