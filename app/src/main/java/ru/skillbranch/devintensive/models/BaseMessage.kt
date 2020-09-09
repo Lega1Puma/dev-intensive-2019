@@ -1,29 +1,30 @@
 package ru.skillbranch.devintensive.models
 
+import ru.skillbranch.devintensive.models.data.Chat
+import ru.skillbranch.devintensive.models.data.User
 import java.util.*
 
 abstract class BaseMessage (
     val id: String,
-    val from: User?,
+    val from: User,
     val chat: Chat,
     val isIncoming: Boolean = false,
-    val date: Date = Date()
+    val date: Date = Date(),
+    var isReaded: Boolean = false
 ) {
-    abstract fun formatMessage() :String
-
-    companion object AbstractFactory {
-
-        var lastId: Int = -1
-
-        fun makeMessage(from: User?, chat: Chat, date: Date = Date(), type: String = "text", payload: Any?, isIncoming: Boolean = false): BaseMessage {
-
-            lastId++
-
-            return when(type) {
-                "image" -> ImageMessage(id = "$lastId", from = from, chat = chat, date = date, image = payload.toString(), isIncoming = isIncoming)
-                else -> TextMessage(id = "$lastId", from = from, chat = chat, date = date, text = payload.toString(), isIncoming = isIncoming)
-            }
-
-        }
-    }
+//    abstract fun formatMessage() :String
+//
+//    companion object AbstractFactory {
+//
+//        var lastId: Int = -1
+//
+//        fun makeMessage(from: User, chat: Chat, date: Date = Date(), type: String = "text", payload: Any?, isIncoming: Boolean = false): BaseMessage {
+//            lastId++
+//            return when(type) {
+//                "image" -> ImageMessage(id = "$lastId", from = from, chat = chat, date = date, image = payload.toString(), isIncoming = isIncoming)
+//                else -> TextMessage(id = "$lastId", from = from, chat = chat, date = date, text = payload.toString(), isIncoming = isIncoming)
+//            }
+//        }
+//
+//    }
 }

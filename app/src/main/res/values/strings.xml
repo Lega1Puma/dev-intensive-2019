@@ -7,4 +7,5 @@
     <string name="profile_label_rating">Рейтинг</string>
     <string name="profile_label_respect">Уважение</string>
     <string name="profile_validate_error">Невалидный адрес репозитория</string>
+    <string name="menu_search_title">Поиск</string>
 </resources>
