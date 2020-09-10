@@ -10,11 +10,12 @@ import com.bumptech.glide.Glide
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
+import kotlinx.android.synthetic.main.item_chat_archive.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.ChatItem
 
-class ChatAdapter(val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdapter.ChatItemViewHolder>() {
+class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdapter.ChatItemViewHolder>() {
 
     companion object {
         private const val ARCHIVE_TYPE = 0
@@ -23,6 +24,9 @@ class ChatAdapter(val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdap
     }
 
     var items: List<ChatItem> = listOf()
+    private var archivePrevious: Array<ChatItem?> = arrayOfNulls(2)
+    private var messageCount = 0
+    private var archiveFlag = false
 
     override fun getItemViewType(position: Int): Int = when(items[position].chatType) {
         Chat.ChatType.ARCHIVE -> ARCHIVE_TYPE
@@ -35,6 +39,7 @@ class ChatAdapter(val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdap
         return when(viewType) {
             SINGLE_TYPE -> SingleViewHolder(inflater.inflate(R.layout.item_chat_single, parent, false))
             GROUP_TYPE -> GroupViewHolder(inflater.inflate(R.layout.item_chat_group, parent, false))
+            ARCHIVE_TYPE -> ArchiveViewHolder(inflater.inflate(R.layout.item_chat_archive, parent, false))
             else -> SingleViewHolder(inflater.inflate(R.layout.item_chat_single, parent, false))
         }
     }
@@ -46,14 +51,37 @@ class ChatAdapter(val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdap
     override fun getItemCount(): Int = items.size
 
     fun updateData(data: List<ChatItem>) {
+        val data2: List<ChatItem>
+
+        if (!archiveFlag && archivePrevious[1] != null) {
+            val chatToArchive = ChatItem(
+                "-1",
+                null,
+                "",
+                "",
+                archivePrevious[1]?.shortDescription,
+                messageCount,
+                archivePrevious[1]?.lastMessageDate,
+                false,
+                Chat.ChatType.ARCHIVE,
+                archivePrevious[1]?.author
+            )
+            val copy = data.toMutableList()
+            copy.add(0, chatToArchive)
+            data2 = copy.toList()
+            archiveFlag = false
+        } else {
+            data2 = data
+        }
+
         val diffCallback = object :DiffUtil.Callback() {
             override fun getOldListSize(): Int =items.size
 
-            override fun getNewListSize(): Int = data.size
+            override fun getNewListSize(): Int = data2.size
 
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = items[oldItemPosition].id == data[newItemPosition].id
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = items[oldItemPosition].id == data2[newItemPosition].id
 
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean  = items[oldItemPosition].hashCode() == data[newItemPosition].hashCode()
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean  = items[oldItemPosition].hashCode() == data2[newItemPosition].hashCode()
 
         }
         val diffResult = DiffUtil.calculateDiff(diffCallback)
@@ -61,7 +89,56 @@ class ChatAdapter(val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdap
         diffResult.dispatchUpdatesTo(this)
     }
 
-    abstract inner class ChatItemViewHolder(convertView: View): RecyclerView.ViewHolder(convertView), LayoutContainer {
+    fun addArchiveInfo(item: ChatItem) {
+        archiveFlag = true
+        if (archivePrevious[0] == null) {
+            archivePrevious[0] = item
+        } else {
+            archivePrevious[1] = archivePrevious[0]
+            archivePrevious[0] = item
+        }
+        messageCount += item.messageCount
+        val chatToArchive = ChatItem(
+            "-1",
+            null,
+            "",
+            "",
+            item.shortDescription,
+            messageCount,
+            item.lastMessageDate,
+            false,
+            Chat.ChatType.ARCHIVE,
+            item.author
+        )
+        val copy = items.toMutableList()
+        copy.add(0, chatToArchive)
+        updateData(copy)
+    }
+
+    fun removeArchiveInfo(item: ChatItem) {
+        messageCount -= item.messageCount
+        if (archivePrevious[1] != null) {
+            archiveFlag = true
+            val chatToArchive = ChatItem(
+                "-1",
+                null,
+                "",
+                "",
+                archivePrevious[1]!!.shortDescription,
+                messageCount,
+                archivePrevious[1]!!.lastMessageDate,
+                false,
+                Chat.ChatType.ARCHIVE,
+                archivePrevious[1]!!.author
+            )
+            val copy = items.toMutableList()
+            copy.add(0, chatToArchive)
+            updateData(copy)
+        }
+        archivePrevious[0] = archivePrevious[1]
+    }
+
+    abstract class ChatItemViewHolder(convertView: View): RecyclerView.ViewHolder(convertView), LayoutContainer {
 
         override val containerView: View?
             get() = itemView
@@ -135,6 +212,28 @@ class ChatAdapter(val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdap
 
         override fun onItemCleared() {
             itemView.setBackgroundColor(Color.WHITE)
+        }
+    }
+
+    inner class ArchiveViewHolder(convertView: View): ChatItemViewHolder(convertView) {
+
+        override fun bind(item: ChatItem, listener: (ChatItem) -> Unit) {
+            with(tv_date_archive) {
+                visibility = if (item.lastMessageDate != null) View.VISIBLE else View.GONE
+                text = item.lastMessageDate
+            }
+            with(tv_counter_archive) {
+                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
+                text = item.messageCount.toString()
+            }
+            tv_message_archive.text = item.shortDescription
+            with(tv_message_author_archive) {
+                visibility = if (item.messageCount > 0) View.VISIBLE else View.GONE
+                text = item.author
+            }
+            itemView.setOnClickListener {
+                listener.invoke(item)
+            }
         }
     }
 }

@@ -9,6 +9,7 @@ import ru.skillbranch.devintensive.utils.DataGenerator
 object GroupRepository {
 
     fun loadUsers(): List<User> = DataGenerator.stabUsers
+
     fun createChat(items: List<UserItem>) {
         val ids = items.map {
             it.id

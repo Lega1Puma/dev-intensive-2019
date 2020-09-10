@@ -11,8 +11,8 @@ import ru.skillbranch.devintensive.repositories.GroupRepository
 class GroupViewModel: ViewModel() {
 
     private val query = mutableLiveData("")
-    private val groupRepository = GroupRepository
     private val userItems = mutableLiveData(loadUsers())
+    private val groupRepository = GroupRepository
     private val selectedItems = Transformations.map(userItems){users->
         users.filter {
             it.isSelected
