@@ -23,7 +23,7 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
         private const val GROUP_TYPE = 2
     }
 
-    private var items: List<ChatItem> = listOf()
+    var items: List<ChatItem> = listOf()
     private var archiveItem: ChatItem? = null
     private var messageCount = 0
 
