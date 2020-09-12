@@ -1,6 +1,5 @@
 package ru.skillbranch.devintensive.models.data
 
-import androidx.annotation.VisibleForTesting
 import ru.skillbranch.devintensive.extensions.shortFormat
 import ru.skillbranch.devintensive.extensions.truncate
 import ru.skillbranch.devintensive.models.BaseMessage
@@ -16,21 +15,12 @@ data class Chat (
     var messages: MutableList<BaseMessage> = mutableListOf(),
     var isArchived: Boolean = false
 ) {
-
-    enum class ChatType{
-        SINGLE,
-        GROUP,
-        ARCHIVE
-    }
-
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageDate(): Date? {
+    private fun lastMessageDate(): Date? {
         val lastMessage: BaseMessage? = messages.lastOrNull()
         return lastMessage?.date
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun lastMessageShort(): Pair<String, String> {
+    private fun lastMessageShort(): Pair<String, String> {
         val noMessage = "Сообщений нет"
         val lastMessage = messages.lastOrNull() ?: return noMessage to ""
         val author: String = lastMessage.from.firstName ?: ""
@@ -42,8 +32,7 @@ data class Chat (
         return message to author
     }
 
-    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
-    fun unreadableMessageCount(): Int {
+    private fun unreadableMessageCount(): Int {
         return messages.filter {
             !it.isReaded
         }.size
@@ -85,5 +74,10 @@ data class Chat (
         }
     }
 
+    enum class ChatType{
+        SINGLE,
+        GROUP,
+        ARCHIVE
+    }
 }
 
