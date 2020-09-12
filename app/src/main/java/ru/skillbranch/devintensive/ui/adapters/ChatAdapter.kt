@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.VisibleForTesting
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -12,8 +13,8 @@ import kotlinx.android.synthetic.main.item_chat_group.*
 import kotlinx.android.synthetic.main.item_chat_single.*
 import kotlinx.android.synthetic.main.item_chat_archive.*
 import ru.skillbranch.devintensive.R
-import ru.skillbranch.devintensive.models.data.Chat
 import ru.skillbranch.devintensive.models.data.ChatItem
+import ru.skillbranch.devintensive.models.data.ChatType
 
 class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<ChatAdapter.ChatItemViewHolder>() {
 
@@ -23,14 +24,15 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
         private const val GROUP_TYPE = 2
     }
 
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     var items: List<ChatItem> = listOf()
     private var archiveItem: ChatItem? = null
     private var messageCount = 0
 
     override fun getItemViewType(position: Int): Int = when(items[position].chatType) {
-        Chat.ChatType.ARCHIVE -> ARCHIVE_TYPE
-        Chat.ChatType.SINGLE -> SINGLE_TYPE
-        Chat.ChatType.GROUP -> GROUP_TYPE
+        ChatType.ARCHIVE -> ARCHIVE_TYPE
+        ChatType.SINGLE -> SINGLE_TYPE
+        ChatType.GROUP -> GROUP_TYPE
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatItemViewHolder {
@@ -77,7 +79,7 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
                 messageCount,
                 data.last().lastMessageDate,
                 false,
-                Chat.ChatType.ARCHIVE,
+                ChatType.ARCHIVE,
                 data.last().author
             )
             copy.add(0, archiveItem!!)

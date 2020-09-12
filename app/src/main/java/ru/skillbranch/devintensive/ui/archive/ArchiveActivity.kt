@@ -47,7 +47,6 @@ class ArchiveActivity : AppCompatActivity() {
         chatAdapter = ChatAdapter {
             Snackbar.make(rv_archive_list, "Click on ${it.title}", Snackbar.LENGTH_LONG).show()
         }
-        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
 
         val icon = resources.getDrawable(R.drawable.ic_unarchive_24, theme)
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter, icon) {
@@ -55,6 +54,7 @@ class ArchiveActivity : AppCompatActivity() {
             viewModel.restoreFromArchive(chatItem.id)
         }
 
+        val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
         with(rv_archive_list) {
             adapter = chatAdapter
             layoutManager = LinearLayoutManager(this@ArchiveActivity)
