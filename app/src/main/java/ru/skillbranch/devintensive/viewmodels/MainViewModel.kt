@@ -10,9 +10,8 @@ import ru.skillbranch.devintensive.repositories.ChatRepository
 
 class MainViewModel: ViewModel() {
 
-
-    private val query = mutableLiveData("")
     private val chatRepository = ChatRepository
+    private val query = mutableLiveData("")
     private val chatItems: LiveData<List<ChatItem>> = Transformations.map(chatRepository.loadChats()){ chats->
         return@map chats.filter {
             !it.isArchived

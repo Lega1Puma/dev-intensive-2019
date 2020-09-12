@@ -76,12 +76,10 @@ class MainActivity: AppCompatActivity() {
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter) {
             val chatItem = it
             viewModel.addToArchive(chatItem.id)
-//            chatAdapter.addArchiveInfo(chatItem)
             Snackbar
                 .make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG)
                 .setAction("Отменить") {
                     viewModel.restoreFromArchive(chatItem.id)
-//                    chatAdapter.removeArchiveInfo(chatItem)
                 }
                 .show()
         }

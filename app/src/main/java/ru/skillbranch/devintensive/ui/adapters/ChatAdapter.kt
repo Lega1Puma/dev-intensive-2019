@@ -26,7 +26,6 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
     var items: List<ChatItem> = listOf()
     private var archiveItem: ChatItem? = null
     private var messageCount = 0
-//    private var archiveFlag = false
 
     override fun getItemViewType(position: Int): Int = when(items[position].chatType) {
         Chat.ChatType.ARCHIVE -> ARCHIVE_TYPE
@@ -62,7 +61,6 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
 
     fun updateArchiveData(data: List<ChatItem>) {
         val copy: MutableList<ChatItem>
-        val lastItem = data.lastIndex
         if (data.isNotEmpty()) {
             messageCount = 0
             for (chat in data) {
