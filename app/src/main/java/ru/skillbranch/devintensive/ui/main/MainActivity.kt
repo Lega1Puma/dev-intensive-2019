@@ -3,7 +3,6 @@ package ru.skillbranch.devintensive.ui.main
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
@@ -16,13 +15,16 @@ import kotlinx.android.synthetic.main.activity_main.*
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.ui.adapters.ChatAdapter
 import ru.skillbranch.devintensive.ui.adapters.ChatItemTouchHelperCallback
+import ru.skillbranch.devintensive.ui.archive.ArchiveActivity
 import ru.skillbranch.devintensive.ui.group.GroupActivity
+import ru.skillbranch.devintensive.viewmodels.ArchiveViewModel
 import ru.skillbranch.devintensive.viewmodels.MainViewModel
 
 class MainActivity: AppCompatActivity() {
 
     private lateinit var chatAdapter: ChatAdapter
     private lateinit var viewModel: MainViewModel
+    private lateinit var viewModelArchive: ArchiveViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -62,7 +64,11 @@ class MainActivity: AppCompatActivity() {
 
     private fun initViews() {
         chatAdapter = ChatAdapter{
-            Snackbar.make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG).show()
+            if (it.id == "-1") {
+                val intent = Intent(this, ArchiveActivity::class.java)
+                startActivity(intent)
+            } else
+                Snackbar.make(rv_chat_list, "Click on ${it.title}", Snackbar.LENGTH_LONG).show()
         }
 
         val divider = DividerItemDecoration(this, DividerItemDecoration.VERTICAL)
@@ -70,12 +76,12 @@ class MainActivity: AppCompatActivity() {
         val touchCallback = ChatItemTouchHelperCallback(chatAdapter) {
             val chatItem = it
             viewModel.addToArchive(chatItem.id)
-            chatAdapter.addArchiveInfo(chatItem)
+//            chatAdapter.addArchiveInfo(chatItem)
             Snackbar
                 .make(rv_chat_list, "Вы точно хотите добавить ${it.title} в архив?", Snackbar.LENGTH_LONG)
                 .setAction("Отменить") {
                     viewModel.restoreFromArchive(chatItem.id)
-                    chatAdapter.removeArchiveInfo(chatItem)
+//                    chatAdapter.removeArchiveInfo(chatItem)
                 }
                 .show()
         }
@@ -98,6 +104,10 @@ class MainActivity: AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(MainViewModel::class.java)
         viewModel.getChatData().observe(this, Observer {
             chatAdapter.updateData(it)
+        })
+        viewModelArchive = ViewModelProviders.of(this).get(ArchiveViewModel::class.java)
+        viewModelArchive.getChatData().observe(this, Observer {
+            chatAdapter.updateArchiveData(it)
         })
     }
 }

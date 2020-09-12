@@ -24,9 +24,9 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
     }
 
     var items: List<ChatItem> = listOf()
-    private var archivePrevious: Array<ChatItem?> = arrayOfNulls(2)
+    private var archiveItem: ChatItem? = null
     private var messageCount = 0
-    private var archiveFlag = false
+//    private var archiveFlag = false
 
     override fun getItemViewType(position: Int): Int = when(items[position].chatType) {
         Chat.ChatType.ARCHIVE -> ARCHIVE_TYPE
@@ -51,91 +51,60 @@ class ChatAdapter(private val listener: (ChatItem)->Unit): RecyclerView.Adapter<
     override fun getItemCount(): Int = items.size
 
     fun updateData(data: List<ChatItem>) {
-        val data2: List<ChatItem>
+        if (archiveItem != null) {
+            val copy = data.toMutableList()
+            copy.add(0, archiveItem!!)
+            updateChatData(copy.toList())
+        } else {
+            updateChatData(data)
+        }
+    }
 
-        if (!archiveFlag && archivePrevious[1] != null) {
-            val chatToArchive = ChatItem(
+    fun updateArchiveData(data: List<ChatItem>) {
+        val copy: MutableList<ChatItem>
+        val lastItem = data.lastIndex
+        if (data.isNotEmpty()) {
+            messageCount = 0
+            for (chat in data) {
+                messageCount += chat.messageCount
+            }
+            copy = items.toMutableList()
+            if (archiveItem != null) copy.removeAt(0)
+            archiveItem = ChatItem(
                 "-1",
                 null,
                 "",
                 "",
-                archivePrevious[1]?.shortDescription,
+                data.last().shortDescription,
                 messageCount,
-                archivePrevious[1]?.lastMessageDate,
+                data.last().lastMessageDate,
                 false,
                 Chat.ChatType.ARCHIVE,
-                archivePrevious[1]?.author
+                data.last().author
             )
-            val copy = data.toMutableList()
-            copy.add(0, chatToArchive)
-            data2 = copy.toList()
-            archiveFlag = false
+            copy.add(0, archiveItem!!)
         } else {
-            data2 = data
+            archiveItem = null
+            copy = items.toMutableList()
+            copy.removeAt(0)
         }
+        updateChatData(copy.toList())
+    }
 
+    private fun updateChatData(data: List<ChatItem>) {
         val diffCallback = object :DiffUtil.Callback() {
             override fun getOldListSize(): Int =items.size
 
-            override fun getNewListSize(): Int = data2.size
+            override fun getNewListSize(): Int = data.size
 
-            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = items[oldItemPosition].id == data2[newItemPosition].id
+            override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean = items[oldItemPosition].id == data[newItemPosition].id
 
-            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean  = items[oldItemPosition].hashCode() == data2[newItemPosition].hashCode()
+            override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean  = items[oldItemPosition].hashCode() == data[newItemPosition].hashCode()
 
         }
         val diffResult = DiffUtil.calculateDiff(diffCallback)
         items = data
         diffResult.dispatchUpdatesTo(this)
-    }
-
-    fun addArchiveInfo(item: ChatItem) {
-        archiveFlag = true
-        if (archivePrevious[0] == null) {
-            archivePrevious[0] = item
-        } else {
-            archivePrevious[1] = archivePrevious[0]
-            archivePrevious[0] = item
-        }
-        messageCount += item.messageCount
-        val chatToArchive = ChatItem(
-            "-1",
-            null,
-            "",
-            "",
-            item.shortDescription,
-            messageCount,
-            item.lastMessageDate,
-            false,
-            Chat.ChatType.ARCHIVE,
-            item.author
-        )
-        val copy = items.toMutableList()
-        copy.add(0, chatToArchive)
-        updateData(copy)
-    }
-
-    fun removeArchiveInfo(item: ChatItem) {
-        messageCount -= item.messageCount
-        if (archivePrevious[1] != null) {
-            archiveFlag = true
-            val chatToArchive = ChatItem(
-                "-1",
-                null,
-                "",
-                "",
-                archivePrevious[1]!!.shortDescription,
-                messageCount,
-                archivePrevious[1]!!.lastMessageDate,
-                false,
-                Chat.ChatType.ARCHIVE,
-                archivePrevious[1]!!.author
-            )
-            val copy = items.toMutableList()
-            copy.add(0, chatToArchive)
-            updateData(copy)
-        }
-        archivePrevious[0] = archivePrevious[1]
     }
 
     abstract class ChatItemViewHolder(convertView: View): RecyclerView.ViewHolder(convertView), LayoutContainer {

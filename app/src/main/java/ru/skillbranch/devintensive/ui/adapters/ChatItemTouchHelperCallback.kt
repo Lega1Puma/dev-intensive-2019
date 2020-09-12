@@ -4,13 +4,14 @@ import android.graphics.Canvas
 import android.graphics.Paint
 import android.graphics.Rect
 import android.graphics.RectF
+import android.graphics.drawable.Drawable
 import android.view.View
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.models.data.ChatItem
 
-class ChatItemTouchHelperCallback(private val adapter: ChatAdapter, private val swipeListener: (ChatItem) -> Unit): ItemTouchHelper.Callback() {
+class ChatItemTouchHelperCallback(private val adapter: ChatAdapter, private val customIcon: Drawable? = null, private val swipeListener: (ChatItem) -> Unit): ItemTouchHelper.Callback() {
 
     private val bgRect = RectF()
     private val bgPaint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -82,7 +83,7 @@ class ChatItemTouchHelperCallback(private val adapter: ChatAdapter, private val 
     }
 
     private fun drawIcon(canvas: Canvas, itemView: View, dX: Float) {
-        val icon = itemView.resources.getDrawable(R.drawable.ic_archive_24, itemView.context.theme)
+        val icon = customIcon ?: itemView.resources.getDrawable(R.drawable.ic_archive_24, itemView.context.theme)
         val iconSize = itemView.resources.getDimensionPixelSize(R.dimen.icon_size)
         val space = itemView.resources.getDimensionPixelSize(R.dimen.spacing_normal_16)
 
